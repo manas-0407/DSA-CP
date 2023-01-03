@@ -145,10 +145,9 @@ public class CSES6Tab {
             }
         }
             out.println(dp[n][n]);
-            out.close();
         } else {
             out.println(0);
-            out.close();
         }
+        out.close();
     }
 }
