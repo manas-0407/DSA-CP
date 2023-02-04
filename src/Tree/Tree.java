@@ -82,6 +82,16 @@ public class Tree {
         return root;
     }
 
+    static int treeHeight(Node root){
+        if(root == null) return 0;
+        if(root.left == null && root.right == null) return 0;
+        int x = treeHeight(root.left);
+        int y = treeHeight(root.right);
+        debug(x);
+        debug(y);
+        return 1 + (x>y?x:y) ;
+    }
+
     static void debug(Object... o){
         if(o.length != 0) System.err.println(Arrays.deepToString(o));
         else System.err.println();
@@ -100,5 +110,7 @@ public class Tree {
         System.out.println("Delete ");
         root = delete(root, sc.nextInt());
         printTree(root);
+        System.out.println("Height of Tree is: ");
+        System.out.println(treeHeight(root));
     }
 }
