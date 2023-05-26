@@ -1,10 +1,9 @@
 package Dynamic_Programming;
-//Not the optimal one
 
 import java.util.*;
 import java.io.*;
 
-public class CSES11 {
+public class CSES12 {
     static FastRead sc = new FastRead(System.in);
     static PrintWriter out = new PrintWriter(System.out);
     private static class FastRead {
@@ -127,15 +126,25 @@ public class CSES11 {
         if(o.length != 0) System.err.println(Arrays.deepToString(o));
         else System.err.println();
     }
-    static int getCuts(int a,int b){
-        if(a==0 || b==0) return 0;
-        if(a%b==0) return a/b;
-        return a/b+getCuts(b,a%b);
-    }
     public static void main(String[] args)throws IOException {
-        int a=sc.nextInt();
-        int b=sc.nextInt();
-        out.println(getCuts(a,b)-1);
-        out.close();
+        int n=sc.nextInt();
+        int[] a=new int[n];
+        int i;
+        for(i=0;i<n;i++) {a[i]=sc.nextInt();}
+        HashSet<Integer> hs=new HashSet<>();
+        for(i=0;i<n;i++){
+            ArrayList<Integer> al=new ArrayList<>();
+            for(int xx:hs){
+                al.add(xx+a[i]);
+            }
+            hs.add(a[i]);
+            hs.addAll(al);
+        }
+        ArrayList<Integer> al = new ArrayList<>(hs);
+        Collections.sort(al);
+        out.println(al.size());
+        for(int vv:al) out.print(vv+" ");
+        out.println();
+        out.flush();
     }
 }

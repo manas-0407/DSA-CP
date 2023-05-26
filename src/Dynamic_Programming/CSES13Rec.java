@@ -1,10 +1,11 @@
 package Dynamic_Programming;
-//Not the optimal one
 
 import java.util.*;
 import java.io.*;
 
-public class CSES11 {
+import static java.lang.System.out;
+
+public class CSES13Rec {
     static FastRead sc = new FastRead(System.in);
     static PrintWriter out = new PrintWriter(System.out);
     private static class FastRead {
@@ -127,15 +128,36 @@ public class CSES11 {
         if(o.length != 0) System.err.println(Arrays.deepToString(o));
         else System.err.println();
     }
-    static int getCuts(int a,int b){
-        if(a==0 || b==0) return 0;
-        if(a%b==0) return a/b;
-        return a/b+getCuts(b,a%b);
-    }
+    static long gameValue(int[] a,int l,int r,boolean chance_first,long sum){ // each want to win.
+
+        if(l>r) return 0;
+
+        /*
+        8
+        10 15 100 3 2 7 6 10
+         */
+
+        if(chance_first){
+            long x=gameValue(a,l+1,r,false,sum-a[l]); //choosing left how much 2nd earns
+            long y=gameValue(a,l,r-1,false,sum-a[r]); // choosing right
+
+            return x>y?(sum-y):(sum-x);
+        }
+
+        else {
+            long x=gameValue(a,l+1,r,true,sum-a[l]);  //choosing left how much 1st earns
+            long y=gameValue(a,l,r-1,true,sum-a[r]);
+
+            return x>y?(sum-y):(sum-x);
+        }
+    }// lets get this game ready with dp
     public static void main(String[] args)throws IOException {
-        int a=sc.nextInt();
-        int b=sc.nextInt();
-        out.println(getCuts(a,b)-1);
-        out.close();
+        int n=sc.nextInt();
+        int[] a=new int[n];
+        int i;
+        long sum=0;
+        for(i=0;i<n;i++) {a[i]=sc.nextInt();sum+=a[i];}
+        out.println(gameValue(a,0,n-1,true,sum));
+        out.flush();
     }
 }

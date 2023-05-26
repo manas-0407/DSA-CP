@@ -1,10 +1,11 @@
 package Dynamic_Programming;
-//Not the optimal one
 
 import java.util.*;
 import java.io.*;
 
-public class CSES11 {
+import static java.lang.System.out;
+
+public class CSES13Tab {
     static FastRead sc = new FastRead(System.in);
     static PrintWriter out = new PrintWriter(System.out);
     private static class FastRead {
@@ -127,15 +128,29 @@ public class CSES11 {
         if(o.length != 0) System.err.println(Arrays.deepToString(o));
         else System.err.println();
     }
-    static int getCuts(int a,int b){
-        if(a==0 || b==0) return 0;
-        if(a%b==0) return a/b;
-        return a/b+getCuts(b,a%b);
-    }
     public static void main(String[] args)throws IOException {
-        int a=sc.nextInt();
-        int b=sc.nextInt();
-        out.println(getCuts(a,b)-1);
-        out.close();
+        int n=sc.nextInt();
+        int[] a=new int[n];
+        int i;
+        for(i=0;i<n;i++) {a[i]=sc.nextInt();}
+        long[] prefix=new long[n];
+        for(i=0;i<n;i++) prefix[i] = i==0?a[i]:a[i]+prefix[i-1];
+        long[][] dp=new long[n][n];
+        for(int j=0;j<n;j++){
+            for(i=0;i<n;i++){
+                if(i+j>=n) dp[i][j]=-1;
+                else if(j==0) dp[i][j]=a[i];
+                else {
+//                    long x=dp[i][j-1];
+//                    long y=dp[i+1][j-1];
+                    if(dp[i][j-1] > dp[i+1][j-1]) dp[i][j]=a[i]+prefix[i+j]-prefix[i]- dp[i+1][j-1];
+                    else dp[i][j]=a[i+j]+prefix[i+j-1]-(i>0?prefix[i-1]:0)- dp[i][j-1];
+                }
+            }
+        }
+//        for(long[] ppx:dp) out.println(Arrays.toString(ppx));
+
+        out.println(dp[0][n-1]);
+        out.flush();
     }
 }

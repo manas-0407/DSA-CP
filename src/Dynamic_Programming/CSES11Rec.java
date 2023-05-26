@@ -1,10 +1,9 @@
 package Dynamic_Programming;
-//Not the optimal one
 
 import java.util.*;
 import java.io.*;
 
-public class CSES11 {
+public class CSES11Rec {
     static FastRead sc = new FastRead(System.in);
     static PrintWriter out = new PrintWriter(System.out);
     private static class FastRead {
@@ -127,15 +126,25 @@ public class CSES11 {
         if(o.length != 0) System.err.println(Arrays.deepToString(o));
         else System.err.println();
     }
-    static int getCuts(int a,int b){
-        if(a==0 || b==0) return 0;
-        if(a%b==0) return a/b;
-        return a/b+getCuts(b,a%b);
+    static int minCut(int a,int b,int[][] dp){
+        debug(a+" "+b);
+        if(a==b) return dp[a][b] = 0;
+        if(dp[a][b] != -1) return dp[a][b];
+        int i,minC=Integer.MAX_VALUE;
+        for(i=1;i<a;i++){
+            minC=Math.min(minC,1 + minCut(b<i? b:i,b<i?i:b,dp) + minCut(b<(a-i)?b:(a-i),b<(a-i)?(a-i):b,dp));
+        }
+        for(i=1;i<b;i++){
+            minC=Math.min(minC,1 + minCut(a<i? a:i,a<i?i:a,dp) + minCut(a<(b-i)?a:(b-i),a<(b-i)?(b-i):a,dp));
+        }
+        return dp[a][b] = minC;
     }
     public static void main(String[] args)throws IOException {
         int a=sc.nextInt();
         int b=sc.nextInt();
-        out.println(getCuts(a,b)-1);
-        out.close();
+        int[][] dp=new int[(a<b?a:b)+1][(b>a?b:a)+1];
+        for (int[] x:dp) Arrays.fill(x,-1);
+        out.println(minCut((a<b?a:b),(a<b?b:a),dp));
+        out.flush();
     }
 }

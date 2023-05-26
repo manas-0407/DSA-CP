@@ -1,10 +1,12 @@
 package Dynamic_Programming;
-//Not the optimal one
 
 import java.util.*;
 import java.io.*;
+import static java.lang.Math.*;
 
-public class CSES11 {
+import static java.lang.System.out;
+
+public class CSES11Tab {
     static FastRead sc = new FastRead(System.in);
     static PrintWriter out = new PrintWriter(System.out);
     private static class FastRead {
@@ -127,15 +129,31 @@ public class CSES11 {
         if(o.length != 0) System.err.println(Arrays.deepToString(o));
         else System.err.println();
     }
-    static int getCuts(int a,int b){
-        if(a==0 || b==0) return 0;
-        if(a%b==0) return a/b;
-        return a/b+getCuts(b,a%b);
-    }
     public static void main(String[] args)throws IOException {
         int a=sc.nextInt();
         int b=sc.nextInt();
-        out.println(getCuts(a,b)-1);
-        out.close();
+        int[][] dp=new int[a +1][b + 1]; // dp[min][max]
+        int i,j;
+        for(i=1;i<=a;i++) dp[i][1] = i-1;
+        for(i=1;i<=b;i++) dp[1][i] = i-1;
+        // dp[a][b] = min cuts for dp[a-i][b]+1 For i:[1,a) and min cuts for dp[a][b-i]+1 for i:[1,b)
+        for(i=1;i<=a;i++){
+            for(j=1;j<=b;j++){
+             if(i==j) dp[i][j]=0;
+             else {
+                 // i -> a  and j -> b
+                 int minc=Integer.MAX_VALUE;
+                 for (int x=1;x<i;x++){
+                     minc = min(minc , 1+dp[x][j]+dp[i-x][j]);
+                 }
+                 for(int y=1;y<j;y++){
+                     minc=min(minc , 1+dp[i][y]+dp[i][j-y]);
+                 }
+                 dp[i][j]=minc;
+             }
+            }
+        }
+        out.println(dp[a][b]);
+        out.flush();
     }
 }

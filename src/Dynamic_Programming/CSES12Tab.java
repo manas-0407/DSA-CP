@@ -1,10 +1,11 @@
 package Dynamic_Programming;
-//Not the optimal one
 
 import java.util.*;
 import java.io.*;
 
-public class CSES11 {
+import static java.lang.System.out;
+
+public class CSES12Tab {
     static FastRead sc = new FastRead(System.in);
     static PrintWriter out = new PrintWriter(System.out);
     private static class FastRead {
@@ -127,15 +128,25 @@ public class CSES11 {
         if(o.length != 0) System.err.println(Arrays.deepToString(o));
         else System.err.println();
     }
-    static int getCuts(int a,int b){
-        if(a==0 || b==0) return 0;
-        if(a%b==0) return a/b;
-        return a/b+getCuts(b,a%b);
-    }
     public static void main(String[] args)throws IOException {
-        int a=sc.nextInt();
-        int b=sc.nextInt();
-        out.println(getCuts(a,b)-1);
-        out.close();
+        int n=sc.nextInt();
+        int[] a=new int[n];
+        int i,sum=0;
+        for(i=0;i<n;i++){
+            a[i] = sc.nextInt();
+            sum+=a[i];
+        }
+        int[] dp = new int[sum+1];
+        dp[0] = 1;
+        for(i=0;i<n;i++){
+            for(int j=sum;j>=0;j--){
+                if(dp[j]==1 && j+a[i]<=sum) dp[j+a[i]] = 1;
+            }
+        }
+        int ct=0;
+        for(int x:dp) ct+=x;
+        out.println(ct-1);
+        for(i=1;i<=sum;i++) out.print(dp[i]==1?i+" ":"");
+        out.flush();
     }
 }
