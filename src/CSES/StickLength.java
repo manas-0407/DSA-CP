@@ -1,9 +1,7 @@
 package CSES;
-
 import java.util.*;
 import java.io.*;
-
-public class StaticRangeSumQueries {
+public class StickLength {
     static FastRead sc = new FastRead(System.in);
     static PrintWriter out = new PrintWriter(System.out);
     private static class FastRead {
@@ -126,25 +124,41 @@ public class StaticRangeSumQueries {
         if(o.length != 0) System.err.println(Arrays.deepToString(o));
         else System.err.println();
     }
+    static long cost(int []a,int target){
+        long sum=0;
+        for(int x:a){
+            sum+=Math.abs(x-target);
+        }
+        return sum;
+    }
+    static long minOfThree(long a, long b, long c) {
+            if (a < b) return a < c ? a : c;
+            else return b < c ? b : c;
+    }
+    static long ts(int l, int r,int[] a) {
+        while (r>l) {
+            if(r-l==2){
+                return minOfThree(cost(a,l),cost(a,l+1),cost(a,r));
+            }
+            if(r-l==1) return Math.min(cost(a,l),cost(a,r));
+//            debug(l+" "+r);
+            int m1 = l + (r - l) / 3;
+            int m2 = r - (r - l) / 3;
+            long f1 = cost(a,m1);      //evaluates the function at m1
+            long f2 = cost(a,m2);      //evaluates the function at m2
+            if (f1 > f2)
+                l = m1;
+            else
+                r = m2;
+        }
+        return cost(a,l);                    //return the maximum of f(x) in [l, r]
+    }
     public static void main(String[] args)throws IOException {
         int n=sc.nextInt();
-//        int x=n;
-        debug(n);
-        int q=sc.nextInt();
         int[] a=new int[n];
-        int i;
-        for(i=0;i<n;i++) a[i]=sc.nextInt();
-        long[] sum=new long[n];
-        for(i=0;i<n;i++) sum[i] = i==0 ? a[i] : sum[i-1]+a[i];
-        i=0;
-
-        while (i<q){
-            int aa=sc.nextInt();
-            int bb=sc.nextInt();
-            out.println(sum[bb-1]-(aa>1?sum[aa-2] : 0));
-            out.flush();
-            i++;
-        }
-        out.close();
+        int i,max=Integer.MIN_VALUE;
+        for(i=0;i<n;i++) {a[i]=sc.nextInt();max=Math.max(max,a[i]);}
+        out.println(ts(1,max,a));
+        out.flush();
     }
 }

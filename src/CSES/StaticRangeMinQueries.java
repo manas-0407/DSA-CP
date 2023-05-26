@@ -3,7 +3,9 @@ package CSES;
 import java.util.*;
 import java.io.*;
 
-public class StaticRangeSumQueries {
+import static java.lang.System.out;
+
+public class StaticRangeMinQueries {
     static FastRead sc = new FastRead(System.in);
     static PrintWriter out = new PrintWriter(System.out);
     private static class FastRead {
@@ -128,23 +130,22 @@ public class StaticRangeSumQueries {
     }
     public static void main(String[] args)throws IOException {
         int n=sc.nextInt();
-//        int x=n;
-        debug(n);
         int q=sc.nextInt();
         int[] a=new int[n];
-        int i;
-        for(i=0;i<n;i++) a[i]=sc.nextInt();
-        long[] sum=new long[n];
-        for(i=0;i<n;i++) sum[i] = i==0 ? a[i] : sum[i-1]+a[i];
-        i=0;
-
-        while (i<q){
-            int aa=sc.nextInt();
-            int bb=sc.nextInt();
-            out.println(sum[bb-1]-(aa>1?sum[aa-2] : 0));
-            out.flush();
-            i++;
+        int i=0;
+        for(i=0;i<n;i++) {a[i]=sc.nextInt();}
+        int col = (int) (Math.log(n) / Math.log(2));
+        int[][] minDP = new int[n][col+1];
+        for(int j=0;j<=col;j++){
+            for(i=0;i<n-(1<<j)+1;i++)
+                minDP[i][j]= j>0 ? Math.min(minDP[i][j-1],minDP[i+(1<<(j-1))][j-1]) : a[i];
         }
-        out.close();
+        while (q-- > 0){
+            int l=sc.nextInt(),r=sc.nextInt();
+            int logLenght = (int) (Math.log(r-l+1)/Math.log(2.0));
+            int min = Math.min(minDP[l-1][logLenght],minDP[r-(1<<logLenght)][logLenght]);
+            out.println(min);
+            out.flush();
+        }
     }
 }

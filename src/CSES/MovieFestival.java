@@ -3,7 +3,9 @@ package CSES;
 import java.util.*;
 import java.io.*;
 
-public class StaticRangeSumQueries {
+import static java.lang.System.out;
+
+public class MovieFestival {
     static FastRead sc = new FastRead(System.in);
     static PrintWriter out = new PrintWriter(System.out);
     private static class FastRead {
@@ -126,25 +128,34 @@ public class StaticRangeSumQueries {
         if(o.length != 0) System.err.println(Arrays.deepToString(o));
         else System.err.println();
     }
+    private static class Pair {
+            int key;
+            int val;
+
+            public Pair(int key, int val) {
+                this.key = key;
+                this.val = val;
+            }
+    }
     public static void main(String[] args)throws IOException {
         int n=sc.nextInt();
-//        int x=n;
-        debug(n);
-        int q=sc.nextInt();
-        int[] a=new int[n];
         int i;
-        for(i=0;i<n;i++) a[i]=sc.nextInt();
-        long[] sum=new long[n];
-        for(i=0;i<n;i++) sum[i] = i==0 ? a[i] : sum[i-1]+a[i];
-        i=0;
-
-        while (i<q){
-            int aa=sc.nextInt();
-            int bb=sc.nextInt();
-            out.println(sum[bb-1]-(aa>1?sum[aa-2] : 0));
-            out.flush();
-            i++;
+        Pair[] p=new Pair[n];
+        for(i=0;i<n;i++) p[i]=new Pair(sc.nextInt(),sc.nextInt());
+        Arrays.sort(p,(x,y)->{return x.key-y.key;});
+        int ct=0;
+        Pair hold = null;
+        for(i=0;i<n;i++){
+            if(hold == null){
+                hold=p[i];
+            }else if(p[i].key>=hold.val){
+                hold=p[i];
+                ct++;
+            }else if(p[i].val<=hold.val){
+                hold=p[i];
+            }
         }
-        out.close();
+        out.println(ct+1);
+        out.flush();
     }
 }

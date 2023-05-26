@@ -1,9 +1,11 @@
-package CSES;
+//package CSES;
 
 import java.util.*;
 import java.io.*;
 
-public class StaticRangeSumQueries {
+import static java.lang.System.out;
+
+public class SumOf2Value {
     static FastRead sc = new FastRead(System.in);
     static PrintWriter out = new PrintWriter(System.out);
     private static class FastRead {
@@ -128,23 +130,34 @@ public class StaticRangeSumQueries {
     }
     public static void main(String[] args)throws IOException {
         int n=sc.nextInt();
-//        int x=n;
-        debug(n);
-        int q=sc.nextInt();
-        int[] a=new int[n];
+        int sum=sc.nextInt();
+        HashMap<Integer,ArrayList<Integer>> hm=new HashMap<>();
         int i;
-        for(i=0;i<n;i++) a[i]=sc.nextInt();
-        long[] sum=new long[n];
-        for(i=0;i<n;i++) sum[i] = i==0 ? a[i] : sum[i-1]+a[i];
-        i=0;
-
-        while (i<q){
-            int aa=sc.nextInt();
-            int bb=sc.nextInt();
-            out.println(sum[bb-1]-(aa>1?sum[aa-2] : 0));
-            out.flush();
-            i++;
+        for(i=0;i<n;i++){
+            int x=sc.nextInt();
+            if(!hm.containsKey(x)) {
+                hm.put(x,new ArrayList<>());
+                hm.get(x).add(i+1);
+            }
+            else hm.get(x).add(i+1);
         }
-        out.close();
+//        debug(hm);
+        boolean bb=false;
+        for(Map.Entry<Integer,ArrayList<Integer>> en:hm.entrySet()){
+            if(hm.containsKey(sum-en.getKey())){
+                if(en.getKey()*2 == sum && en.getValue().size()>1){
+                    out.println(en.getValue().get(0)+" "+en.getValue().get(1));
+                    bb=true;
+                    break;
+                }
+                else if(en.getKey() != sum-en.getKey()){
+                    out.println(en.getValue().get(0) + " " + hm.get(sum - en.getKey()).get(0));
+                    bb = true;
+                    break;
+                }
+            }
+        }
+        out.println(!bb?"IMPOSSIBLE":"");
+        out.flush();
     }
 }

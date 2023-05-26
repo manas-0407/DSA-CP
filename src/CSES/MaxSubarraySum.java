@@ -3,7 +3,9 @@ package CSES;
 import java.util.*;
 import java.io.*;
 
-public class StaticRangeSumQueries {
+import static java.lang.System.out;
+
+public class MaxSubarraySum {
     static FastRead sc = new FastRead(System.in);
     static PrintWriter out = new PrintWriter(System.out);
     private static class FastRead {
@@ -128,23 +130,16 @@ public class StaticRangeSumQueries {
     }
     public static void main(String[] args)throws IOException {
         int n=sc.nextInt();
-//        int x=n;
-        debug(n);
-        int q=sc.nextInt();
         int[] a=new int[n];
         int i;
         for(i=0;i<n;i++) a[i]=sc.nextInt();
-        long[] sum=new long[n];
-        for(i=0;i<n;i++) sum[i] = i==0 ? a[i] : sum[i-1]+a[i];
-        i=0;
-
-        while (i<q){
-            int aa=sc.nextInt();
-            int bb=sc.nextInt();
-            out.println(sum[bb-1]-(aa>1?sum[aa-2] : 0));
-            out.flush();
-            i++;
+        long max=Integer.MIN_VALUE,curm=0;
+        for(i=0;i<n;i++){
+            curm += a[i];
+            max=max<curm?curm:max;
+            if(curm<0) curm=0;
         }
-        out.close();
+        out.println(max);
+        out.flush();
     }
 }

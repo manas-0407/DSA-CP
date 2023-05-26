@@ -3,7 +3,9 @@ package CSES;
 import java.util.*;
 import java.io.*;
 
-public class StaticRangeSumQueries {
+import static java.lang.System.out;
+
+public class RestraurantCustomers {
     static FastRead sc = new FastRead(System.in);
     static PrintWriter out = new PrintWriter(System.out);
     private static class FastRead {
@@ -126,25 +128,35 @@ public class StaticRangeSumQueries {
         if(o.length != 0) System.err.println(Arrays.deepToString(o));
         else System.err.println();
     }
-    public static void main(String[] args)throws IOException {
-        int n=sc.nextInt();
-//        int x=n;
-        debug(n);
-        int q=sc.nextInt();
-        int[] a=new int[n];
-        int i;
-        for(i=0;i<n;i++) a[i]=sc.nextInt();
-        long[] sum=new long[n];
-        for(i=0;i<n;i++) sum[i] = i==0 ? a[i] : sum[i-1]+a[i];
-        i=0;
+    private static class Pair {
+            int key;
+            int val;
 
-        while (i<q){
-            int aa=sc.nextInt();
-            int bb=sc.nextInt();
-            out.println(sum[bb-1]-(aa>1?sum[aa-2] : 0));
+            public Pair(int key, int val) {
+                this.key = key;
+                this.val = val;
+            }
+    }
+    public static void main(String[] args)throws IOException {
+        int t=1;
+        while (t-- > 0){
+            int n=sc.nextInt();
+            n*=2;
+            Pair[] p=new Pair[n];
+            int i;
+            for(i=0;i<n;i++){
+                p[i] = new Pair(sc.nextInt(),i%2==0?1:-1);
+            }
+            Arrays.sort(p, (x,y)-> {
+                return x.key-y.key;
+            });
+            int max=Integer.MIN_VALUE,ct=0;
+            for(i=0;i<n;i++){
+                ct+=p[i].val;
+                max=max>ct?max:ct;
+            }
+            out.println(max);
             out.flush();
-            i++;
         }
-        out.close();
     }
 }

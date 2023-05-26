@@ -3,7 +3,9 @@ package CSES;
 import java.util.*;
 import java.io.*;
 
-public class StaticRangeSumQueries {
+import static java.lang.System.out;
+
+public class RemoveGame {
     static FastRead sc = new FastRead(System.in);
     static PrintWriter out = new PrintWriter(System.out);
     private static class FastRead {
@@ -126,25 +128,62 @@ public class StaticRangeSumQueries {
         if(o.length != 0) System.err.println(Arrays.deepToString(o));
         else System.err.println();
     }
+//    static long gameValue(int[] a,int l,int r,boolean chance_first,long sum){ // each want to win.
+//        if(l>r) return 0;
+//        if(chance_first){debug(a[l]+ gameValue(a,l+1,r,false,sum-a[l]));
+//            long x=a[l]+ gameValue(a,l+1,r,false,sum-a[l]);
+//            long y=a[r]+gameValue(a,l,r-1,false,sum-a[r]);
+//
+//            if(x>y){
+////                out.println("A picked: "+a[l]+" at "+l);
+//                return x;
+//            }
+//            else {
+////                out.println("A picked: "+a[r]+" at "+r);
+//                return y;
+//            }
+//        }else {
+//            long x=gameValue(a,l+1,r,true,sum-a[l]);
+//            long y=gameValue(a,l,r-1,true,sum-a[r]);
+//
+//            long fwin=x>y?y+a[r]:x+a[l];
+//            return sum-fwin;
+//        }
+//    }
+    static long ct=0;
+    static long gameValue(int[] a,int l,int r,boolean chance_first,long sum){ // each want to win.
+        ct++;
+        if(l>r) return 0;
+
+         //  10 15 100 3 2 7 6 10
+
+        if(chance_first){
+            long x=gameValue(a,l+1,r,false,sum-a[l]); //choosing left how much 2nd earns
+            long y=gameValue(a,l,r-1,false,sum-a[r]); // choosing right
+
+            return x>y?(sum-y):(sum-x);
+        }
+
+        else {
+            long x=gameValue(a,l+1,r,true,sum-a[l]);  //choosing left how much 1st earns
+            long y=gameValue(a,l,r-1,true,sum-a[r]);
+
+            return x>y?(sum-y):(sum-x);
+        }
+    }// lets get this game ready with dp
     public static void main(String[] args)throws IOException {
         int n=sc.nextInt();
-//        int x=n;
-        debug(n);
-        int q=sc.nextInt();
         int[] a=new int[n];
         int i;
-        for(i=0;i<n;i++) a[i]=sc.nextInt();
-        long[] sum=new long[n];
-        for(i=0;i<n;i++) sum[i] = i==0 ? a[i] : sum[i-1]+a[i];
-        i=0;
-
-        while (i<q){
-            int aa=sc.nextInt();
-            int bb=sc.nextInt();
-            out.println(sum[bb-1]-(aa>1?sum[aa-2] : 0));
-            out.flush();
-            i++;
-        }
-        out.close();
+        long sum=0;
+        for(i=0;i<n;i++) {a[i]=sc.nextInt();sum+=a[i];}
+        out.println(gameValue(a,0,n-1,true,sum));
+        debug(ct);
+        out.flush();
     }
 }
+
+/*
+8
+10 15 100 3 2 7 6 10
+ */

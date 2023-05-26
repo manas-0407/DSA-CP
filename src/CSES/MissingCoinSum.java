@@ -1,9 +1,11 @@
-package CSES;
+//package CSES;
 
 import java.util.*;
 import java.io.*;
 
-public class StaticRangeSumQueries {
+import static java.lang.System.out;
+
+public class MissingCoinSum {
     static FastRead sc = new FastRead(System.in);
     static PrintWriter out = new PrintWriter(System.out);
     private static class FastRead {
@@ -126,25 +128,34 @@ public class StaticRangeSumQueries {
         if(o.length != 0) System.err.println(Arrays.deepToString(o));
         else System.err.println();
     }
+    static final Random random = new Random();
+
+    static void ruffleSort(int[] a) {
+            int n = a.length;  //shuffle then sort to decrease worst case probability
+            for (int i = 0; i < n; i++) {
+                int oi = random.nextInt(n), temp = a[oi];
+                a[oi] = a[i];
+                a[i] = temp;
+            }
+            Arrays.sort(a);
+    }
     public static void main(String[] args)throws IOException {
         int n=sc.nextInt();
-//        int x=n;
-        debug(n);
-        int q=sc.nextInt();
         int[] a=new int[n];
         int i;
-        for(i=0;i<n;i++) a[i]=sc.nextInt();
-        long[] sum=new long[n];
-        for(i=0;i<n;i++) sum[i] = i==0 ? a[i] : sum[i-1]+a[i];
-        i=0;
-
-        while (i<q){
-            int aa=sc.nextInt();
-            int bb=sc.nextInt();
-            out.println(sum[bb-1]-(aa>1?sum[aa-2] : 0));
-            out.flush();
-            i++;
+        for(i=0;i<n;i++) {a[i]=sc.nextInt();}
+        long min=1,sum=0;
+        ruffleSort(a);
+        for(i=0;i<n;i++){
+            if(a[i]>sum && min!=a[i]){
+                out.println(min);
+                min=Integer.MIN_VALUE;
+                break;
+            }
+            sum+=a[i];
+            min=sum+1;
         }
-        out.close();
+        out.println(min!=Integer.MIN_VALUE?min:"");
+        out.flush();
     }
 }
