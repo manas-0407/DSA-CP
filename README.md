@@ -2,11 +2,6 @@
 Repo for DSA and CP Problems.
 
 # My Snippets (Handy methods)
-
-import java.util.*;
-import java.io.*;
-
-public class Manas {
     
     static final int mod = 1_000_000_007;                                          // mod_operation
     static long expMod(long base, long exp, long modulo){ // T.C: O(log exp)
@@ -531,19 +526,12 @@ public class Manas {
         \        ____       \
          \_______\___\_______\     
     */
-}
+
 
 
 # My Snippets (Inputs)
 
-import java.util.*;
-import java.io.*;
 
-public class Manas_Input {
-    
-    // FCK SPEEDFORCES
-    
-    
     static FastRead sc = new FastRead(System.in);                                                   // input
     static PrintWriter out = new PrintWriter(System.out);
     private static class FastRead {
@@ -622,4 +610,3 @@ public class Manas_Input {
         }
     }
     
-}
